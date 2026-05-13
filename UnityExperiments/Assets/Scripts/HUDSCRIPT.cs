@@ -1,10 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem; // Wichtig für das neue Input System
+using UnityEngine.UI; // Für Slider
+using UnityEngine.Audio;
 
 public class MainMenuManager : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject pauseMenuUI; // Dein "PauseMenu" Empty Object
+    [SerializeField] private GameObject settingsMenuUI;
+
+    [Header("Settings Controls")]
+    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Slider sensitivitySlider;
+    [SerializeField] private PlayerMovementNew playerScript;
 
     private InputSystem_Actions controls;
     private bool isPaused = false;
@@ -69,8 +77,35 @@ public class MainMenuManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void Settings()
+    public void OpenSettings()
     {
+        pauseMenuUI.SetActive(false);
+        settingsMenuUI.SetActive(true);
         
+        // Hier könntest du gespeicherte Werte in die Slider laden
+        // volumeSlider.value = PlayerPrefs.GetFloat("Volume", 0.5f);
+    }
+
+    public void CloseSettings()
+    {
+        settingsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+    }
+
+    // Wird vom Volume-Slider aufgerufen
+    public void SetVolume(float value)
+    {
+        // Einfachste Methode: Master Volume der ganzen App
+        AudioListener.volume = value;
+        Debug.Log("Volume: " + value);
+    }
+
+    // Wird vom Sensitivity-Slider aufgerufen
+    public void SetSensitivity(float value)
+    {
+        // Hier setzen wir den Wert im Player-Skript
+        // Du müsstest in deinem Player-Skript eine Variable 'mouseSensitivity' haben
+        // playerScript.mouseSensitivity = value;
+        Debug.Log("Sensitivität: " + value);
     }
 }
